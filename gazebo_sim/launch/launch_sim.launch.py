@@ -150,6 +150,26 @@ def generate_launch_description():
         }],
         remappings=remappings
     )
+    kiss_icp_node = Node(
+            package='kiss_icp',
+            executable='kiss_icp_node',
+            name='kiss_icp_node',
+            namespace=namespace,
+            output='screen',
+            remappings=remappings + [
+                ('pointcloud_topic', 'velodyne_points/points'),
+            ],
+            parameters=[{
+                'use_sim_time': use_sim_time,
+                'base_frame': 'robot1/base_link',
+                'lidar_odom_frame': 'odom_lidar',
+                'publish_odom_tf': True,
+                'invert_odom_tf': False,
+                'publish_debug_clouds': True,
+                'position_covariance': 0.1,
+                'orientation_covariance': 0.1,
+            }],
+    )
 
     params_file = os.path.join(get_package_share_directory(package_name), 'config', 'nav2_params.yaml')
     map_dir = os.path.join(get_package_share_directory(package_name), 'maps', 'warehouse_map.yaml')
@@ -192,6 +212,7 @@ def generate_launch_description():
         controller,
         cmd_vel_pub,
         odom,
+        kiss_icp_node,
         rviz,
         # bringup_cmd
     ])

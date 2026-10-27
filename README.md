@@ -3,6 +3,26 @@
 This repository allows you to run dog robots in the GAZEBO simulator. The robot can walk, rotate with 12 degrees of freedom, and features a `robot_msgs` interface. The robot moves using inverse kinematics, and its odometry is based on direct kinematics. Additionally, all functionalities are developed in Python.
 
 
+## Go2 LiDAR and SLAM additions
+
+This fork adds a Gazebo GPU LiDAR to the Go2 model (16 vertical channels, 440 horizontal samples at 10 Hz) and bridges its point cloud into ROS 2. The multi-robot launch bridges each robot's LiDAR topic. A single-robot launch starts KISS-ICP, and a separate launch starts the RTAB-Map 3D LiDAR example.
+
+Install the ROS packages `kiss-icp` and `rtabmap_examples` for the corresponding mapping launches. After building the workspace and sourcing `install/local_setup.bash`, run the simulator with KISS-ICP using:
+
+```bash
+ros2 launch gazebo_sim launch_sim.launch.py
+```
+
+For RTAB-Map with the `robot1` point cloud, run in a separate sourced terminal:
+
+```bash
+ros2 launch gazebo_sim rtabmap_lidar3d_robot1.launch.py
+```
+
+The LiDAR point cloud is published under `/robot1/velodyne_points/points`. The upstream project does not declare a repository-wide license; see its original [repository](https://github.com/abutalipovvv/go2_ros2_sim_py) for provenance.
+
+---
+
 ## Run from docker 
 
 > **Note:** BUILDED AND TESTED WITH NVIDIA GPU.
